@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up - Cooks Delight</title>
+    <link rel="stylesheet" href="../styles/sign-up.css" />
+  </head>
+  <body>
+    <main class="signup-page">
+      <header class="signup-page__topbar">
+        <div class="signup-page__brand-icon" aria-hidden="true">👨‍🍳</div>
+        <h1 class="signup-page__brand-title">Welcome to Cooks Delight</h1>
+      </header>
+
+      <section class="signup-card" aria-labelledby="signup-title">
+        <h2 id="signup-title" class="signup-card__title">Sign Up</h2>
+
+        <form class="signup-form" action="#" method="post">
+          <label class="signup-form__field">
+            <span class="signup-form__icon" aria-hidden="true">👤</span>
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              autocomplete="username"
+              required
+            />
+          </label>
+
+          <label class="signup-form__field">
+            <span class="signup-form__icon" aria-hidden="true">🔒</span>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              autocomplete="new-password"
+              required
+            />
+            <span class="signup-form__eye" aria-hidden="true">◉</span>
+          </label>
+
+          <label class="signup-form__field">
+            <span class="signup-form__icon" aria-hidden="true">✉</span>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              autocomplete="email"
+              required
+            />
+          </label>
+
+          <button class="signup-form__submit" type="submit">SIGN UP</button>
+        </form>
+      </section>
+
+      <p class="signup-page__signin-text">
+        Already have an account? <a href="#" class="signup-page__signin-link">Sign In</a>
+      </p>
+    </main>
+  </body>
+</html>

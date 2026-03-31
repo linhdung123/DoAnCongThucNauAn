@@ -1,0 +1,132 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #e9dfcf;
+  color: #1e1e1e;
+}
+
+.signup-page {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.signup-page__topbar {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-top: 2px solid #2f2f2f;
+  border-bottom: 2px solid #2f2f2f;
+  background-color: #eeeeee;
+}
+
+.signup-page__brand-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.signup-page__brand-title {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  transform: scale(0.42);
+  transform-origin: center;
+}
+
+.signup-card {
+  width: 290px;
+  margin: 22px auto 0;
+  background-color: #f5f0e4;
+  padding: 18px 0 26px;
+  text-align: center;
+}
+
+.signup-card__title {
+  margin: 0 0 14px;
+  font-size: 28px;
+  font-style: italic;
+  font-weight: 400;
+  transform: scale(0.48);
+  transform-origin: center;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.signup-form__field {
+  position: relative;
+  width: 194px;
+  height: 23px;
+  display: flex;
+  align-items: center;
+  background: #cfcfcf;
+}
+
+.signup-form__field input {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0 26px 0 30px;
+  font-size: 14px;
+  font-style: italic;
+  color: #3a3a3a;
+  outline: none;
+}
+
+.signup-form__field input::placeholder {
+  color: #7e7e7e;
+}
+
+.signup-form__icon {
+  position: absolute;
+  left: 8px;
+  font-size: 11px;
+  opacity: 0.9;
+}
+
+.signup-form__eye {
+  position: absolute;
+  right: 10px;
+  font-size: 9px;
+  opacity: 0.9;
+}
+
+.signup-form__submit {
+  margin-top: 12px;
+  width: 112px;
+  height: 28px;
+  border: 0;
+  background: #ffffff;
+  font-size: 28px;
+  font-weight: 700;
+  transform: scale(0.45);
+  transform-origin: center;
+  cursor: pointer;
+}
+
+.signup-page__signin-text {
+  margin: 16px 0 0;
+  text-align: center;
+  font-size: 23px;
+  font-style: italic;
+  color: #4d4d4d;
+  transform: scale(0.42);
+  transform-origin: center;
+}
+
+.signup-page__signin-link {
+  text-decoration: none;
+  color: #2a6ecf;
+  font-style: normal;
+  font-weight: 700;
+}
