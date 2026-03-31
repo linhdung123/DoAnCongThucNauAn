@@ -1,0 +1,80 @@
+/* UserProfile.css */
+.user-profile {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #fdf4e3;
+  color: #333;
+}
+
+.user-profile h1 {
+  font-size: 24px;
+  color: #d9534f;
+}
+
+.user-profile p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.profile-picture {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-picture img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.edit-picture {
+  background-color: #f0ad4e;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.user-info label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.user-info input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.actions {
+  margin-top: 20px;
+}
+
+.edit-button, .save-button, .logout-button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-button {
+  background-color: #5bc0de;
+  color: white;
+}
+
+.save-button {
+  background-color: #5cb85c;
+  color: white;
+}
+
+.logout-button {
+  background-color: #d9534f;
+  color: white;
+}
