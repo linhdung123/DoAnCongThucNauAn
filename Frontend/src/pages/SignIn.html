@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In - Cooks Delight</title>
+    <link rel="stylesheet" href="../styles/sign-in.css" />
+  </head>
+  <body>
+    <main class="signin-page">
+      <header class="signin-page__topbar">
+        <div class="signin-page__brand-icon" aria-hidden="true">👨‍🍳</div>
+        <h1 class="signin-page__brand-title">Welcome to Cooks Delight</h1>
+      </header>
+
+      <section class="signin-card" aria-labelledby="signin-title">
+        <h2 id="signin-title" class="signin-card__title">Sign In</h2>
+
+        <form class="signin-form" action="#" method="post">
+          <label class="signin-form__field">
+            <span class="signin-form__icon" aria-hidden="true">👤</span>
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              autocomplete="username"
+              required
+            />
+          </label>
+
+          <label class="signin-form__field">
+            <span class="signin-form__icon" aria-hidden="true">🔒</span>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              autocomplete="current-password"
+              required
+            />
+            <span class="signin-form__eye" aria-hidden="true">◉</span>
+          </label>
+
+          <a class="signin-form__forgot" href="#">Forgot Password?</a>
+
+          <div class="signin-form__actions">
+            <a class="signin-form__button-link" href="./SignUp.html">SIGN UP</a>
+            <button class="signin-form__button" type="submit">SIGN IN</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>
