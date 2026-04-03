@@ -1,0 +1,19 @@
+<%- include('../layout/header') %>
+
+<% 
+  const r = typeof recipe !== 'undefined' && recipe ? recipe : { _id: null, title: 'Chi tiết công thức (TV D)' };
+%>
+<article class="recipe-detail container">
+  <h1><%= r.title %></h1>
+  <p class="detail-placeholder">TV D thay bằng nội dung công thức (ảnh, nguyên liệu, các bước…).</p>
+
+  <div id="comment-section">
+    <% if (r._id) { %>
+      <%- include('../comments/_comments', { recipeId: r._id }) %>
+    <% } else { %>
+      <p class="empty-hint">Chưa có recipeId — TV D truyền biến <code>recipe</code> khi render.</p>
+    <% } %>
+  </div>
+</article>
+
+<%- include('../layout/footer') %>
