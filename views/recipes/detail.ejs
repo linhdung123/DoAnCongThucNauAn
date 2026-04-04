@@ -7,6 +7,14 @@
   <h1><%= r.title %></h1>
   <p class="detail-placeholder">TV D thay bằng nội dung công thức (ảnh, nguyên liệu, các bước…).</p>
 
+  <div id="rating-section">
+    <% if (r._id) { %>
+      <%- include('../favorites/_rating-section', { recipeId: r._id }) %>
+    <% } else { %>
+      <p class="empty-hint">Chưa có recipeId — TV F cần <code>recipe._id</code> để hiển thị yêu thích &amp; đánh giá.</p>
+    <% } %>
+  </div>
+
   <div id="comment-section">
     <% if (r._id) { %>
       <%- include('../comments/_comments', { recipeId: r._id }) %>
