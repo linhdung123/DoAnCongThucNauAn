@@ -6,7 +6,9 @@
   <title><%= typeof title !== 'undefined' ? title : 'Công thức nấu ăn' %></title>
   <link rel="stylesheet" href="/css/style.css" />
 </head>
-<body>
+<body<% if (typeof bodyClass !== 'undefined' && bodyClass) { %> class="<%= bodyClass %>"<% } %>>
+  <% var _hideHeader = typeof hideSiteHeader !== 'undefined' && hideSiteHeader; %>
+  <% if (!_hideHeader) { %>
   <header class="site-header">
     <div class="container header-inner">
       <a href="/" class="logo">🍳 Công thức hay</a>
@@ -23,4 +25,5 @@
       </nav>
     </div>
   </header>
-  <main class="site-main">
+  <% } %>
+  <main class="site-main<% if (typeof mainClass !== 'undefined' && mainClass) { %> <%= mainClass %><% } %>">

@@ -1,0 +1,22 @@
+<%- include('../layout/header') %>
+
+<section class="section" style="max-width: 480px; margin: 0 auto;">
+  <h1 class="section-title">Đăng nhập</h1>
+  <p class="section-sub">
+    Trang đăng nhập đầy đủ (email, mật khẩu, JWT cookie) do <strong>TV B</strong> triển khai theo đề bài.
+    Hiện chỉ có trang placeholder để không bị lỗi 404.
+  </p>
+  <% if (typeof redirect !== 'undefined' && redirect) { %>
+    <p class="empty-hint">Sau khi đăng nhập, bạn sẽ được chuyển tới: <code><%= redirect %></code></p>
+  <% } %>
+  <p class="empty-hint">
+    Để test <strong>Quản lý món</strong> (TV C), nhờ TV B merge chức năng auth, hoặc tạm thời dùng token
+    (cookie <code>token</code> / <code>localStorage</code>) nếu nhóm đã thống nhất.
+  </p>
+  <p style="margin-top: 1.5rem;">
+    <a class="btn btn-primary" href="/">Về trang chủ</a>
+    <a class="btn btn-ghost" href="/auth/register" style="margin-left: 0.5rem;">Đăng ký</a>
+  </p>
+</section>
+
+<%- include('../layout/footer') %>

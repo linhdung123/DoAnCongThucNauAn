@@ -437,3 +437,9 @@ body {
 .recipe-detail h1 {
   margin-top: 0;
 }
+
+/* Trang quản lý công thức — nền đồng bộ với giao diện Cooks Delight */
+body.page-recipe-manage,
+body.page-tips {
+  background: #fff3e0;
+}
