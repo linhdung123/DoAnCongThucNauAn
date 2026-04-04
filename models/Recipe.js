@@ -9,6 +9,10 @@ const recipeSchema = new mongoose.Schema(
     description: { type: String, default: '' },
     image: { type: String, default: '' },
     category: { type: String, default: 'Món Việt', trim: true },
+    /** Thời gian nấu (phút) — hiển thị trang Top món & form TV C */
+    cookTime: { type: Number, default: null, min: 0 },
+    /** easy | medium | hard — đề bài TV C */
+    difficulty: { type: String, enum: ['easy', 'medium', 'hard'], default: 'easy' },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   },
   { timestamps: true }
