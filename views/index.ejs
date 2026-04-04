@@ -1,0 +1,58 @@
+<%- include('layout/header') %>
+
+<section class="hero banner">
+  <div class="container hero-inner">
+    <h1>Khám phá công thức nấu ăn mỗi ngày</h1>
+    <p class="hero-lead">
+      Từ món Việt đến ẩm thực thế giới — lưu công thức, chia sẻ bình luận và nấu cùng cả nhà.
+    </p>
+    <a class="btn btn-primary" href="/list">Xem tất cả công thức</a>
+  </div>
+</section>
+
+<section class="section featured">
+  <div class="container">
+    <h2 class="section-title">Công thức nổi bật</h2>
+    <p class="section-sub">Sáu công thức mới nhất trên hệ thống</p>
+    <% if (!featuredRecipes || featuredRecipes.length === 0) { %>
+      <p class="empty-hint">Chưa có công thức nào. TV C có thể thêm món để hiển thị tại đây.</p>
+    <% } else { %>
+      <div class="card-grid">
+        <% featuredRecipes.forEach(function (recipe) { %>
+          <article class="recipe-card">
+            <a href="/list/<%= recipe._id %>" class="card-link">
+              <div class="card-image-wrap">
+                <% if (recipe.image) { %>
+                  <img src="<%= recipe.image %>" alt="" loading="lazy" />
+                <% } else { %>
+                  <div class="card-placeholder" aria-hidden="true">🍽️</div>
+                <% } %>
+              </div>
+              <div class="card-body">
+                <span class="card-category"><%= recipe.category || 'Món ăn' %></span>
+                <h3 class="card-title"><%= recipe.title %></h3>
+                <% if (recipe.description) { %>
+                  <p class="card-desc"><%= recipe.description.length > 100 ? recipe.description.slice(0, 100) + '…' : recipe.description %></p>
+                <% } %>
+              </div>
+            </a>
+          </article>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<section class="section categories">
+  <div class="container">
+    <h2 class="section-title">Danh mục</h2>
+    <p class="section-sub">Chọn chủ đề bạn yêu thích</p>
+    <ul class="category-chips">
+      <% categories.forEach(function (cat) { %>
+        <li><a class="chip" href="/search?q=<%= encodeURIComponent(cat) %>"><%= cat %></a></li>
+      <% }); %>
+    </ul>
+  </div>
+</section>
+
+<%- include('layout/footer') %>

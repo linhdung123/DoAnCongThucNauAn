@@ -1,0 +1,158 @@
+<% 
+  const rid = typeof recipeId !== 'undefined' ? String(recipeId) : '';
+%>
+<section class="comments-block" data-recipe-id="<%= rid %>">
+  <h2 class="comments-title">Bình luận</h2>
+  <p class="comments-hint">
+    Đăng nhập để gửi bình luận. TV B lưu JWT (ví dụ <code>localStorage.token</code> hoặc cookie <code>token</code>) để gửi kèm yêu cầu.
+  </p>
+
+  <form id="comment-form" class="comment-form" novalidate>
+    <label for="comment-content" class="visually-hidden">Nội dung bình luận</label>
+    <textarea id="comment-content" name="content" rows="4" placeholder="Chia sẻ cảm nhận của bạn…" required></textarea>
+    <button type="submit" class="btn btn-primary">Gửi</button>
+    <p id="comment-form-message" class="form-message" role="status" aria-live="polite"></p>
+  </form>
+
+  <ul id="comment-list" class="comment-list" aria-live="polite"></ul>
+</section>
+
+<script>
+(function () {
+  var root = document.querySelector('.comments-block[data-recipe-id="<%= rid %>"]');
+  if (!root) return;
+  var recipeId = root.getAttribute('data-recipe-id');
+  var listEl = document.getElementById('comment-list');
+  var form = document.getElementById('comment-form');
+  var textarea = document.getElementById('comment-content');
+  var msgEl = document.getElementById('comment-form-message');
+
+  function getToken() {
+    try {
+      var t = localStorage.getItem('token');
+      if (t) return t;
+    } catch (e) {}
+    return null;
+  }
+
+  function authHeaders() {
+    var token = getToken();
+    var h = { 'Accept': 'application/json' };
+    if (token) h['Authorization'] = 'Bearer ' + token;
+    return h;
+  }
+
+  function formatTime(iso) {
+    if (!iso) return '';
+    try {
+      var d = new Date(iso);
+      return d.toLocaleString('vi-VN', { dateStyle: 'short', timeStyle: 'short' });
+    } catch (e) { return ''; }
+  }
+
+  function renderComments(comments) {
+    listEl.innerHTML = '';
+    if (!comments || !comments.length) {
+      var empty = document.createElement('li');
+      empty.className = 'comment-empty';
+      empty.textContent = 'Chưa có bình luận nào. Hãy là người đầu tiên!';
+      listEl.appendChild(empty);
+      return;
+    }
+    comments.forEach(function (c) {
+      var li = document.createElement('li');
+      li.className = 'comment-item';
+      li.dataset.id = c._id;
+      var avatar = (c.user && c.user.avatar) ? c.user.avatar : '';
+      var initials = (c.user && c.user.username) ? c.user.username.charAt(0).toUpperCase() : '?';
+      var delBtn = '';
+      if (c.isOwner) {
+        delBtn = '<button type="button" class="btn btn-ghost btn-delete-comment" data-id="' + c._id + '">Xóa</button>';
+      }
+      li.innerHTML =
+        '<div class="comment-avatar">' +
+          (avatar ? '<img src="' + avatar.replace(/"/g, '&quot;') + '" alt="" />' : '<span class="avatar-fallback">' + initials + '</span>') +
+        '</div>' +
+        '<div class="comment-body">' +
+          '<div class="comment-meta">' +
+            '<span class="comment-author">' + (c.user && c.user.username ? escapeHtml(c.user.username) : 'Người dùng') + '</span>' +
+            '<time datetime="' + (c.createdAt || '') + '">' + formatTime(c.createdAt) + '</time>' +
+          '</div>' +
+          '<p class="comment-text">' + escapeHtml(c.content || '') + '</p>' +
+          delBtn +
+        '</div>';
+      listEl.appendChild(li);
+    });
+  }
+
+  function escapeHtml(s) {
+    var div = document.createElement('div');
+    div.textContent = s;
+    return div.innerHTML;
+  }
+
+  function loadComments() {
+    fetch('/comments/' + encodeURIComponent(recipeId), { headers: authHeaders() })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (_ref) {
+        if (!_ref.ok) throw new Error(_ref.j.message || 'Không tải được bình luận');
+        renderComments(_ref.j.comments || []);
+      })
+      .catch(function (e) {
+        listEl.innerHTML = '<li class="comment-error">' + escapeHtml(e.message || 'Lỗi tải bình luận') + '</li>';
+      });
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    msgEl.textContent = '';
+    var content = (textarea.value || '').trim();
+    if (!content) {
+      msgEl.textContent = 'Vui lòng nhập nội dung.';
+      return;
+    }
+    var token = getToken();
+    if (!token) {
+      msgEl.textContent = 'Bạn cần đăng nhập để gửi bình luận.';
+      return;
+    }
+    fetch('/comments/' + encodeURIComponent(recipeId), {
+      method: 'POST',
+      headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders()),
+      body: JSON.stringify({ content: content })
+    })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (_ref2) {
+        if (!_ref2.ok) throw new Error(_ref2.j.message || 'Gửi thất bại');
+        textarea.value = '';
+        msgEl.textContent = 'Đã gửi bình luận.';
+        loadComments();
+      })
+      .catch(function (err) {
+        msgEl.textContent = err.message || 'Có lỗi xảy ra.';
+      });
+  });
+
+  listEl.addEventListener('click', function (e) {
+    var btn = e.target.closest('.btn-delete-comment');
+    if (!btn) return;
+    var id = btn.getAttribute('data-id');
+    if (!id || !getToken()) return;
+    if (!confirm('Xóa bình luận này?')) return;
+    fetch('/comments/' + encodeURIComponent(id), {
+      method: 'DELETE',
+      headers: authHeaders()
+    })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (_ref3) {
+        if (!_ref3.ok) throw new Error(_ref3.j.message || 'Xóa thất bại');
+        loadComments();
+      })
+      .catch(function (err) {
+        alert(err.message || 'Không xóa được.');
+      });
+  });
+
+  loadComments();
+})();
+</script>
