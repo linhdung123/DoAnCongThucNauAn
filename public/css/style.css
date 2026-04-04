@@ -437,3 +437,118 @@ body {
 .recipe-detail h1 {
   margin-top: 0;
 }
+
+.chip-active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+.chip-active:hover {
+  color: #fff;
+  filter: brightness(1.05);
+}
+
+.list-page-filters {
+  margin-bottom: 1.75rem;
+}
+
+.detail-breadcrumb {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  margin-bottom: 1rem;
+}
+
+.detail-breadcrumb a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.detail-breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.detail-breadcrumb-current {
+  color: var(--color-text);
+}
+
+.detail-header {
+  margin-bottom: 1.25rem;
+}
+
+.detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.detail-badge {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  background: rgba(196, 92, 38, 0.12);
+  color: var(--color-accent-dark);
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.detail-hero {
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.75rem;
+  background: #eee;
+}
+
+.detail-hero-img {
+  display: block;
+  width: 100%;
+  max-height: min(420px, 55vh);
+  object-fit: cover;
+}
+
+.detail-section {
+  margin-bottom: 1.75rem;
+}
+
+.detail-section-title {
+  margin: 0 0 0.65rem;
+  font-size: 1.15rem;
+}
+
+.detail-description {
+  margin: 0;
+  white-space: pre-wrap;
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+.detail-ingredients {
+  margin: 0;
+  padding-left: 1.25rem;
+  line-height: 1.65;
+}
+
+.detail-ingredients li {
+  margin-bottom: 0.35rem;
+}
+
+.detail-steps {
+  margin: 0;
+  padding-left: 1.35rem;
+  line-height: 1.65;
+}
+
+.detail-steps li {
+  margin-bottom: 0.65rem;
+}
+
+#comment-section {
+  margin-top: 2.5rem;
+}
