@@ -15,7 +15,8 @@ router.get('/', async (req, res, next) => {
       .lean();
 
     res.render('index', {
-      title: 'Trang chủ — Công thức nấu ăn',
+      title: 'Trang chủ — Cooks Delight',
+      navActive: 'home',
       featuredRecipes,
       categories: CATEGORY_LABELS,
     });
