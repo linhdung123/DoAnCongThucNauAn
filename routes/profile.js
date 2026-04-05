@@ -190,4 +190,8 @@ router.get('/:userId', async (req, res, next) => {
   }
 });
 
+<<<<<<< HEAD
 module.exports = router;
+=======
+module.exports = router;
+>>>>>>> Develop
