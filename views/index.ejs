@@ -1,0 +1,76 @@
+<%- include('layout/header') %>
+
+<section class="home-welcome">
+  <div class="container">
+    <h1 class="welcome-heading">Welcome to Cooks Delight</h1>
+  </div>
+</section>
+
+<section class="home-hero" aria-label="Giới thiệu">
+  <div class="hero-collage">
+    <img src="/images/v102_106.png" alt="" class="hero-collage-bg" width="1600" height="900" decoding="async" />
+    <div class="hero-collage-layer">
+      <img src="/images/v102_110.png" alt="" class="hero-disc hero-disc--noodles" width="209" height="189" decoding="async" />
+      <img src="/images/v102_112.png" alt="" class="hero-disc hero-disc--steak" width="209" height="189" decoding="async" />
+
+      <h2 class="hero-editorial-title">
+        <span class="hero-eyebrow">[Công Thức Mỗi Ngày]</span>
+        <span class="hero-title-line">Món Ngon Cho Bữa Tối Gia Đình</span>
+      </h2>
+      <p class="hero-body hero-body--mid">
+        Mì xào thập cẩm — món nhanh gọn, đủ chất cho cả nhà sau ngày bận rộn.
+      </p>
+      <p class="hero-body hero-body--lower">
+        Bò bít tết hoàn hảo: sự cân bằng giữa kỹ thuật áp chảo và hương vị nguyên liệu tươi ngon.
+      </p>
+      <p class="hero-tagline">Discover easy, flavorful recipes made to inspire your everyday cooking.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section featured" id="gioi-thieu">
+  <div class="container">
+    <h2 class="section-title">Công thức nổi bật</h2>
+    <p class="section-sub">Sáu công thức mới nhất trên hệ thống</p>
+    <% if (!featuredRecipes || featuredRecipes.length === 0) { %>
+      <p class="empty-hint">Chưa có công thức nào. TV C có thể thêm món để hiển thị tại đây.</p>
+    <% } else { %>
+      <div class="card-grid">
+        <% featuredRecipes.forEach(function (recipe) { %>
+          <article class="recipe-card">
+            <a href="/list/<%= recipe._id %>" class="card-link">
+              <div class="card-image-wrap">
+                <% if (recipe.image) { %>
+                  <img src="<%= recipe.image %>" alt="" loading="lazy" />
+                <% } else { %>
+                  <div class="card-placeholder" aria-hidden="true">🍽️</div>
+                <% } %>
+              </div>
+              <div class="card-body">
+                <span class="card-category"><%= recipe.category || 'Món ăn' %></span>
+                <h3 class="card-title"><%= recipe.title %></h3>
+                <% if (recipe.description) { %>
+                  <p class="card-desc"><%= recipe.description.length > 100 ? recipe.description.slice(0, 100) + '…' : recipe.description %></p>
+                <% } %>
+              </div>
+            </a>
+          </article>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<section class="section categories">
+  <div class="container">
+    <h2 class="section-title">Danh mục</h2>
+    <p class="section-sub">Chọn chủ đề bạn yêu thích</p>
+    <ul class="category-chips">
+      <% categories.forEach(function (cat) { %>
+        <li><a class="chip" href="/search?q=<%= encodeURIComponent(cat) %>"><%= cat %></a></li>
+      <% }); %>
+    </ul>
+  </div>
+</section>
+
+<%- include('layout/footer') %>

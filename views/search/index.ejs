@@ -1,0 +1,115 @@
+<%- include('../layout/header', { navActive: 'tips', title: 'Tìm Kiếm & Lọc Công Thức' }) %>
+
+<div class="search-page">
+  <div class="container search-layout">
+    
+    <!-- Sidebar Filter -->
+    <aside class="search-sidebar">
+      <h2 class="sidebar-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+        </svg>
+        Bộ Lọc
+      </h2>
+      <form action="/search" method="GET" class="filter-form">
+        
+        <div class="filter-group">
+          <label for="q">Từ khóa</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="q" name="q" placeholder="Cơm tấm, phở..." value="<%= query.q || '' %>">
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label for="category">Danh mục</label>
+          <select id="category" name="category" class="custom-select">
+            <option value="all">Tất cả danh mục</option>
+            <option value="Món Việt" <%= query.category === 'Món Việt' ? 'selected' : '' %>>Món Việt</option>
+            <option value="Món Á" <%= query.category === 'Món Á' ? 'selected' : '' %>>Món Á</option>
+            <option value="Món Âu" <%= query.category === 'Món Âu' ? 'selected' : '' %>>Món Âu</option>
+            <option value="Tráng miệng" <%= query.category === 'Tráng miệng' ? 'selected' : '' %>>Tráng miệng</option>
+            <option value="Ăn vặt" <%= query.category === 'Ăn vặt' ? 'selected' : '' %>>Ăn vặt</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="difficulty">Độ khó</label>
+          <select id="difficulty" name="difficulty" class="custom-select">
+            <option value="all">Mọi độ khó</option>
+            <option value="easy" <%= query.difficulty === 'easy' ? 'selected' : '' %>>Dễ (Easy)</option>
+            <option value="medium" <%= query.difficulty === 'medium' ? 'selected' : '' %>>Trung bình (Medium)</option>
+            <option value="hard" <%= query.difficulty === 'hard' ? 'selected' : '' %>>Khó (Hard)</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="maxTime">Thời gian nấu (phút)</label>
+          <div class="range-wrapper">
+            <input type="range" id="maxTime" name="maxTime" min="5" max="120" step="5" value="<%= query.maxTime || 60 %>" oninput="document.getElementById('timeValue').innerText = this.value + ' phút'">
+            <div class="range-value"><span id="timeValue"><%= query.maxTime || 60 %> phút</span></div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-filter">Áp dụng bộ lọc</button>
+        <a href="/search" class="btn-clear">Xóa bộ lọc</a>
+      </form>
+    </aside>
+
+    <!-- Results Area -->
+    <section class="search-results">
+      <header class="results-header">
+        <h1>Kết quả tìm kiếm</h1>
+        <p class="results-count">Tìm thấy <strong><%= recipes.length %></strong> công thức phù hợp.</p>
+      </header>
+
+      <% if (recipes.length > 0) { %>
+        <div class="recipe-grid-search">
+          <% recipes.forEach(recipe => { %>
+            <article class="search-recipe-card">
+              <div class="card-image-search">
+                <img src="<%= recipe.image ? recipe.image : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80' %>" alt="<%= recipe.title %>" loading="lazy">
+                <div class="card-badge <%= recipe.difficulty %>"><%= recipe.difficulty === 'easy' ? 'Dễ' : recipe.difficulty === 'medium' ? 'TB' : 'Khó' %></div>
+              </div>
+              <div class="search-card-body">
+                <span class="search-card-category"><%= recipe.category %></span>
+                <h3 class="search-card-title">
+                  <a href="/recipes/<%= recipe._id %>"><%= recipe.title %></a>
+                </h3>
+                <div class="search-card-meta">
+                  <div class="search-meta-item">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <%= recipe.cookTime ? recipe.cookTime + ' phút' : 'Tùy chọn' %>
+                  </div>
+                  <div class="search-meta-item author">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <%= recipe.author ? recipe.author.username : 'Ẩn danh' %>
+                  </div>
+                </div>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="search-empty">
+          <div class="empty-icon">🍳</div>
+          <h3>Không tìm thấy kết quả</h3>
+          <p>Hãy thử một từ khóa khác hoặc nới lỏng các bộ lọc để tìm được nhiều món ăn ngon hơn nhé!</p>
+        </div>
+      <% } %>
+    </section>
+  </div>
+</div>
+
+<link rel="stylesheet" href="/css/search-filter.css">
+
+<%- include('../layout/footer') %>
