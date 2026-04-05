@@ -1,0 +1,34 @@
+name: Deploy to Docker Hub
+
+# Kích hoạt workflow mỗi khi có sự kiện Push lên nhánh main
+on:
+  push:
+    branches:
+      - Develop
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Bước 1: Lấy mã nguồn từ repository về runner
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Bước 2: Tự động đăng nhập vào Docker Hub
+      # Yêu cầu bạn phải cấu hình GitHub Secrets cho DOCKER_USERNAME và DOCKER_PASSWORD
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Bước 3 & 4: Tự động Build Image từ Dockerfile và Push lên Docker Hub
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          # Đặt tên image và tag. 
+          # Thay 'your-image-name' bằng tên ứng dụng của bạn.
+          tags: ${{ secrets.DOCKER_USERNAME }}/DoAnCongThucNauAn:v1
