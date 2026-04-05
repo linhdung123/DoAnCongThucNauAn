@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
 
-/**
- * Schema tối thiểu để populate bình luận (TV B có thể mở rộng: email, passwordHash…)
- */
 const userSchema = new mongoose.Schema(
   {
-    username: { type: String, required: true, trim: true },
+    username: { type: String, required: true, trim: true, unique: true },
+    email: { type: String, required: true, trim: true, lowercase: true, unique: true },
+    passwordHash: { type: String, required: true },
     avatar: { type: String, default: '' },
   },
   { timestamps: true }

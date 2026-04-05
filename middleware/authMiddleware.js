@@ -69,4 +69,28 @@ function requireAuth(req, res, next) {
   }
 }
 
-module.exports = { optionalAuth, requireAuth, getTokenFromRequest };
+/**
+ * Bắt buộc đăng nhập cho trang HTML — chuyển hướng tới /auth (TV B có thể đổi sang /auth/login).
+ */
+function requireAuthPage(req, res, next) {
+  const token = getTokenFromRequest(req);
+  const secret = process.env.JWT_SECRET;
+  if (!token || !secret) {
+    const nextUrl = encodeURIComponent(req.originalUrl || '/favorites/my-favorites');
+    return res.redirect(`/auth?next=${nextUrl}`);
+  }
+  try {
+    const payload = jwt.verify(token, secret);
+    const userId = payload.userId || payload.id || payload.sub;
+    if (!userId) {
+      return res.redirect('/auth');
+    }
+    req.user = { userId: String(userId), ...payload };
+    res.locals.currentUser = req.user;
+    next();
+  } catch {
+    return res.redirect('/auth');
+  }
+}
+
+module.exports = { optionalAuth, requireAuth, requireAuthPage, getTokenFromRequest };

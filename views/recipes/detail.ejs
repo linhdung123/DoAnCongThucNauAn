@@ -1,19 +1,87 @@
 <%- include('../layout/header') %>
 
-<% 
-  const r = typeof recipe !== 'undefined' && recipe ? recipe : { _id: null, title: 'Chi tiết công thức (TV D)' };
-%>
-<article class="recipe-detail container">
-  <h1><%= r.title %></h1>
-  <p class="detail-placeholder">TV D thay bằng nội dung công thức (ảnh, nguyên liệu, các bước…).</p>
+<% const r = typeof recipe !== 'undefined' && recipe ? recipe : null; %>
+<% if (!r || !r._id) { %>
+  <article class="recipe-detail container">
+    <h1>Không có dữ liệu</h1>
+    <p class="empty-hint">Trang chi tiết cần biến <code>recipe</code> hợp lệ từ máy chủ.</p>
+  </article>
+<% } else { %>
+<article class="recipe-detail container recipe-detail-page">
+  <nav class="detail-breadcrumb" aria-label="Điều hướng">
+    <a href="/list">Công thức</a>
+    <span aria-hidden="true"> / </span>
+    <span class="detail-breadcrumb-current"><%= r.category || 'Món ăn' %></span>
+  </nav>
 
-  <div id="comment-section">
+  <header class="detail-header">
+    <h1><%= r.title %></h1>
+    <div class="detail-meta">
+      <span class="detail-badge"><%= r.category || 'Món ăn' %></span>
+      <% if (r.userId && r.userId.username) { %>
+        <span class="detail-author">Bởi <%= r.userId.username %></span>
+      <% } %>
+      <% if (r.createdAt) { %>
+        <time class="detail-date" datetime="<%= new Date(r.createdAt).toISOString() %>">
+          <%= new Date(r.createdAt).toLocaleDateString('vi-VN') %>
+        </time>
+      <% } %>
+    </div>
+  </header>
+
+  <% if (r.image) { %>
+    <div class="detail-hero">
+      <img src="<%= r.image %>" alt="" class="detail-hero-img" loading="eager" />
+    </div>
+  <% } %>
+
+  <% if (r.description) { %>
+    <section class="detail-section" aria-labelledby="desc-heading">
+      <h2 id="desc-heading" class="detail-section-title">Giới thiệu</h2>
+      <p class="detail-description"><%= r.description %></p>
+    </section>
+  <% } %>
+
+  <% const ingredients = Array.isArray(r.ingredients) ? r.ingredients.filter(Boolean) : []; %>
+  <% if (ingredients.length) { %>
+    <section class="detail-section" aria-labelledby="ing-heading">
+      <h2 id="ing-heading" class="detail-section-title">Nguyên liệu</h2>
+      <ul class="detail-ingredients">
+        <% ingredients.forEach(function (line) { %>
+          <li><%= line %></li>
+        <% }); %>
+      </ul>
+    </section>
+  <% } %>
+
+  <% const steps = Array.isArray(r.steps) ? r.steps.filter(Boolean) : []; %>
+  <% if (steps.length) { %>
+    <section class="detail-section" aria-labelledby="steps-heading">
+      <h2 id="steps-heading" class="detail-section-title">Các bước thực hiện</h2>
+      <ol class="detail-steps">
+        <% steps.forEach(function (step) { %>
+          <li><%= step %></li>
+        <% }); %>
+      </ol>
+    </section>
+  <% } %>
+
+  <% if (!ingredients.length && !steps.length && !r.description) { %>
+    <p class="empty-hint">Chưa có mô tả chi tiết. Khi TV C cập nhật nguyên liệu và bước nấu, nội dung sẽ hiển thị tại đây.</p>
+  <% } %>
+
+  <div id="rating-section">
     <% if (r._id) { %>
-      <%- include('../comments/_comments', { recipeId: r._id }) %>
+      <%- include('../favorites/_rating-section', { recipeId: r._id }) %>
     <% } else { %>
-      <p class="empty-hint">Chưa có recipeId — TV D truyền biến <code>recipe</code> khi render.</p>
+      <p class="empty-hint">Chưa có recipeId — TV F cần <code>recipe._id</code> để hiển thị yêu thích &amp; đánh giá.</p>
     <% } %>
   </div>
+
+  <div id="comment-section">
+    <%- include('../comments/_comments', { recipeId: r._id }) %>
+  </div>
 </article>
+<% } %>
 
 <%- include('../layout/footer') %>
