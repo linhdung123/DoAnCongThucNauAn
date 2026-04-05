@@ -9,7 +9,8 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       # Bước 1: Lấy mã nguồn từ repository về runner
       - name: Checkout repository
@@ -31,4 +32,4 @@ jobs:
           push: true
           # Đặt tên image và tag. 
           # Thay 'your-image-name' bằng tên ứng dụng của bạn.
-          tags: ${{ secrets.DOCKER_USERNAME }}/DoAnCongThucNauAn:v1
+          tags: ${{ secrets.DOCKER_USERNAME }}/doancongthucnauan:v1
