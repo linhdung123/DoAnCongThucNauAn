@@ -1,141 +1,328 @@
 <%- include('../layout/header') %>
 
-<style>
-  .profile-wrap { max-width: 960px; margin: 0 auto; padding: 2rem 0 3rem; }
-  .profile-eyebrow { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; color: #b91c1c; font-weight: 700; margin: 0 0 0.35rem; }
-  .profile-title { margin: 0 0 0.35rem; font-size: clamp(1.5rem, 3vw, 2rem); }
-  .profile-sub { margin: 0 0 1.75rem; color: var(--color-muted); }
-  .profile-banner {
-    display: flex; flex-wrap: wrap; gap: 1.5rem 2rem; align-items: flex-start;
-    background: var(--color-surface); border-radius: var(--radius); box-shadow: var(--shadow);
-    padding: 1.75rem; border: 1px solid var(--color-border); margin-bottom: 1.5rem;
-  }
-  .profile-avatar-wrap { position: relative; flex-shrink: 0; }
-  .profile-avatar {
-    width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
-    background: #e8e4de; border: 3px solid #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-  }
-  .profile-avatar-ph {
-    width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(145deg, #f0ebe4, #e0d8ce);
-    display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; color: var(--color-muted);
-  }
-  .profile-head { flex: 1; min-width: 200px; }
-  .profile-name { margin: 0 0 0.5rem; font-size: 1.35rem; }
-  .profile-bio { margin: 0; color: var(--color-muted); white-space: pre-wrap; line-height: 1.55; }
-  .profile-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
-  .btn-profile-danger {
-    display: inline-block; padding: 0.6rem 1.2rem; border-radius: var(--radius); font-weight: 600; text-decoration: none;
-    background: #b91c1c; color: #fff; border: none; cursor: pointer; font: inherit;
-  }
-  .btn-profile-danger:hover { filter: brightness(1.05); }
-  .btn-profile-primary {
-    display: inline-block; padding: 0.6rem 1.2rem; border-radius: var(--radius); font-weight: 600; text-decoration: none;
-    background: #1d4ed8; color: #fff; border: none; font: inherit;
-  }
-  .btn-profile-primary:hover { filter: brightness(1.05); }
-  .stat-card {
-    background: var(--color-surface); border-radius: var(--radius); box-shadow: var(--shadow);
-    padding: 1.25rem 1.35rem; border: 1px solid var(--color-border);
-    display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem;
-  }
-  .stat-card strong { display: block; font-size: 1.75rem; color: #b91c1c; }
-  .stat-card span { font-size: 0.9rem; color: var(--color-muted); }
-  .stat-icon { font-size: 2rem; opacity: 0.85; }
-  .profile-section-title { font-size: 1.15rem; margin: 0 0 1rem; }
-  .recipe-table-wrap { overflow-x: auto; background: var(--color-surface); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--color-border); }
-  .recipe-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-  .recipe-table th, .recipe-table td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
-  .recipe-table th { background: #faf8f5; font-weight: 600; color: var(--color-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
-  .recipe-table tr:last-child td { border-bottom: 0; }
-  .recipe-table a { color: var(--color-accent-dark); font-weight: 600; text-decoration: none; }
-  .recipe-table a:hover { text-decoration: underline; }
-  .recipe-thumb { width: 56px; height: 40px; object-fit: cover; border-radius: 6px; background: #eee; }
-  .profile-toast { background: #ecfdf5; border: 1px solid #6ee7b7; color: #065f46; padding: 0.75rem 1rem; border-radius: var(--radius); margin-bottom: 1rem; font-size: 0.9rem; }
-  .profile-viewer-note { font-size: 0.85rem; color: var(--color-muted); margin-top: 0.5rem; }
-</style>
+  <style>
+    .profile-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 0 3rem;
+    }
 
-<div class="container profile-wrap">
-  <p class="profile-eyebrow">Cookbook</p>
-  <h1 class="profile-title">Hồ sơ cá nhân</h1>
-  <p class="profile-sub">Thông tin hiển thị công khai cùng các công thức đã đăng.</p>
+    .profile-eyebrow {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #b91c1c;
+      font-weight: 700;
+      margin: 0 0 0.35rem;
+    }
 
-  <% if (typeof saved !== 'undefined' && saved) { %>
-    <p class="profile-toast" role="status">Đã lưu thay đổi hồ sơ.</p>
-  <% } %>
+    .profile-title {
+      margin: 0 0 0.35rem;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+    }
 
-  <div class="profile-banner">
-    <div class="profile-avatar-wrap">
-      <% if (user.avatar) { %>
-        <img class="profile-avatar" src="<%= user.avatar %>" alt="" width="120" height="120" />
-      <% } else { %>
-        <div class="profile-avatar-ph" aria-hidden="true"><%= (user.username || '?').charAt(0).toUpperCase() %></div>
+    .profile-sub {
+      margin: 0 0 1.75rem;
+      color: var(--color-muted);
+    }
+
+    .profile-banner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem 2rem;
+      align-items: flex-start;
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.75rem;
+      border: 1px solid var(--color-border);
+      margin-bottom: 1.5rem;
+    }
+
+    .profile-avatar-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #e8e4de;
+      border: 3px solid #fff;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .profile-avatar-ph {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #f0ebe4, #e0d8ce);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--color-muted);
+    }
+
+    .profile-head {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .profile-name {
+      margin: 0 0 0.5rem;
+      font-size: 1.35rem;
+    }
+
+    .profile-bio {
+      margin: 0;
+      color: var(--color-muted);
+      white-space: pre-wrap;
+      line-height: 1.55;
+    }
+
+    .profile-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .btn-profile-danger {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      text-decoration: none;
+      background: #b91c1c;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .btn-profile-danger:hover {
+      filter: brightness(1.05);
+    }
+
+    .btn-profile-primary {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      text-decoration: none;
+      background: #1d4ed8;
+      color: #fff;
+      border: none;
+      font: inherit;
+    }
+
+    .btn-profile-primary:hover {
+      filter: brightness(1.05);
+    }
+
+    .stat-card {
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.25rem 1.35rem;
+      border: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 1.75rem;
+      color: #b91c1c;
+    }
+
+    .stat-card span {
+      font-size: 0.9rem;
+      color: var(--color-muted);
+    }
+
+    .stat-icon {
+      font-size: 2rem;
+      opacity: 0.85;
+    }
+
+    .profile-section-title {
+      font-size: 1.15rem;
+      margin: 0 0 1rem;
+    }
+
+    .recipe-table-wrap {
+      overflow-x: auto;
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--color-border);
+    }
+
+    .recipe-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .recipe-table th,
+    .recipe-table td {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .recipe-table th {
+      background: #faf8f5;
+      font-weight: 600;
+      color: var(--color-muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .recipe-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .recipe-table a {
+      color: var(--color-accent-dark);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .recipe-table a:hover {
+      text-decoration: underline;
+    }
+
+    .recipe-thumb {
+      width: 56px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 6px;
+      background: #eee;
+    }
+
+    .profile-toast {
+      background: #ecfdf5;
+      border: 1px solid #6ee7b7;
+      color: #065f46;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .profile-viewer-note {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      margin-top: 0.5rem;
+    }
+  </style>
+
+  <div class="container profile-wrap">
+    <p class="profile-eyebrow">Cookbook</p>
+    <h1 class="profile-title">Hồ sơ cá nhân người dùng</h1>
+    <p class="profile-sub">Thông tin hiển thị công khai cùng các công thức đã đăng.</p>
+
+    <% if (typeof saved !=='undefined' && saved) { %>
+      <p class="profile-toast" role="status">Đã lưu thay đổi hồ sơ.</p>
       <% } %>
-    </div>
-    <div class="profile-head">
-      <h2 class="profile-name"><%= user.username %></h2>
-      <% if (user.bio) { %>
-        <p class="profile-bio"><%= user.bio %></p>
-      <% } else { %>
-        <p class="profile-bio">Chưa có giới thiệu ngắn.</p>
-      <% } %>
-      <% if (!isOwner) { %>
-        <p class="profile-viewer-note">Bạn đang xem hồ sơ của người dùng khác.</p>
-      <% } %>
-      <% if (isOwner) { %>
-        <div class="profile-actions">
-          <a class="btn-profile-primary" href="/profile/edit">Sửa thông tin</a>
-        </div>
-      <% } %>
-    </div>
-  </div>
 
-  <div class="stat-card">
-    <div>
-      <strong><%= typeof totalLikesReceived !== 'undefined' ? totalLikesReceived : 0 %></strong>
-      <span>Tổng số lượt thích nhận được (trên các công thức)</span>
-    </div>
-    <span class="stat-icon" aria-hidden="true">❤️</span>
-  </div>
-
-  <h2 class="profile-section-title">Danh sách công thức đã đăng</h2>
-  <% if (!recipes || recipes.length === 0) { %>
-    <p class="empty-hint">Chưa có công thức nào.</p>
-  <% } else { %>
-    <div class="recipe-table-wrap">
-      <table class="recipe-table">
-        <thead>
-          <tr>
-            <th>Ảnh</th>
-            <th>Tên món</th>
-            <th>Danh mục</th>
-            <th>Lượt thích</th>
-            <th>Ngày đăng</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% recipes.forEach(function (recipe) { %>
-            <tr>
-              <td>
-                <% if (recipe.image) { %>
-                  <img class="recipe-thumb" src="<%= recipe.image %>" alt="" width="56" height="40" />
-                <% } else { %>
-                  <span class="empty-hint">—</span>
+        <div class="profile-banner">
+          <div class="profile-avatar-wrap">
+            <% if (user.avatar) { %>
+              <img class="profile-avatar" src="<%= user.avatar %>" alt="" width="120" height="120" />
+              <% } else { %>
+                <div class="profile-avatar-ph" aria-hidden="true">
+                  <%= (user.username || '?' ).charAt(0).toUpperCase() %>
+                </div>
                 <% } %>
-              </td>
-              <td><a href="/list/<%= recipe._id %>"><%= recipe.title %></a></td>
-              <td><%= recipe.category || '—' %></td>
-              <td><%= recipe.likes != null ? recipe.likes : 0 %></td>
-              <td>
-                <% if (recipe.createdAt) { %>
-                  <%= new Date(recipe.createdAt).toLocaleDateString('vi-VN') %>
-                <% } else { %>—<% } %>
-              </td>
-            </tr>
-          <% }); %>
-        </tbody>
-      </table>
-    </div>
-  <% } %>
-</div>
+          </div>
+          <div class="profile-head">
+            <h2 class="profile-name">
+              <%= user.username %>
+            </h2>
+            <% if (user.bio) { %>
+              <p class="profile-bio">
+                <%= user.bio %>
+              </p>
+              <% } else { %>
+                <p class="profile-bio">Chưa có giới thiệu ngắn.</p>
+                <% } %>
+                  <% if (!isOwner) { %>
+                    <p class="profile-viewer-note">Bạn đang xem hồ sơ của người dùng khác.</p>
+                    <% } %>
+                      <% if (isOwner) { %>
+                        <div class="profile-actions">
+                          <a class="btn-profile-primary" href="/profile/edit">Sửa thông tin</a>
+                        </div>
+                        <% } %>
+          </div>
+        </div>
 
-<%- include('../layout/footer') %>
+        <div class="stat-card">
+          <div>
+            <strong>
+              <%= typeof totalLikesReceived !=='undefined' ? totalLikesReceived : 0 %>
+            </strong>
+            <span>Tổng số lượt thích nhận được (trên các công thức)</span>
+          </div>
+          <span class="stat-icon" aria-hidden="true">❤️</span>
+        </div>
+
+        <h2 class="profile-section-title">Danh sách công thức đã đăng</h2>
+        <% if (!recipes || recipes.length===0) { %>
+          <p class="empty-hint">Chưa có công thức nào.</p>
+          <% } else { %>
+            <div class="recipe-table-wrap">
+              <table class="recipe-table">
+                <thead>
+                  <tr>
+                    <th>Ảnh</th>
+                    <th>Tên món</th>
+                    <th>Danh mục</th>
+                    <th>Lượt thích</th>
+                    <th>Ngày đăng</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% recipes.forEach(function (recipe) { %>
+                    <tr>
+                      <td>
+                        <% if (recipe.image) { %>
+                          <img class="recipe-thumb" src="<%= recipe.image %>" alt="" width="56" height="40" />
+                          <% } else { %>
+                            <span class="empty-hint">—</span>
+                            <% } %>
+                      </td>
+                      <td><a href="/list/<%= recipe._id %>">
+                          <%= recipe.title %>
+                        </a></td>
+                      <td>
+                        <%= recipe.category || '—' %>
+                      </td>
+                      <td>
+                        <%= recipe.likes !=null ? recipe.likes : 0 %>
+                      </td>
+                      <td>
+                        <% if (recipe.createdAt) { %>
+                          <%= new Date(recipe.createdAt).toLocaleDateString('vi-VN') %>
+                            <% } else { %>—<% } %>
+                      </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+              </table>
+            </div>
+            <% } %>
+  </div>
+
+  <%- include('../layout/footer') %>
