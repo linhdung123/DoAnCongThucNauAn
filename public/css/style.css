@@ -440,6 +440,12 @@ body {
   margin-top: 0;
 }
 
+/* Trang quản lý công thức — nền đồng bộ với giao diện Cooks Delight */
+body.page-recipe-manage,
+body.page-tips {
+  background: #fff3e0;
+}
+
 /* —— TV F: Yêu thích (Figma — nền ấm, nút cam / xanh lá) —— */
 .favorites-page {
   min-height: 60vh;

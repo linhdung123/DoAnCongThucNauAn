@@ -23,6 +23,7 @@ app.use('/list', require('./routes/recipeList'));
 app.use('/search', require('./routes/search'));
 app.use('/favorites', require('./routes/favorites'));
 app.use('/profile', require('./routes/profile'));
+app.use('/tips', require('./routes/tips'));
 
 app.use((err, req, res, next) => {
   console.error(err);
