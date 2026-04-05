@@ -10,6 +10,10 @@ const recipeSchema = new mongoose.Schema(
     image: { type: String, default: '' },
     category: { type: String, default: 'Món Việt', trim: true },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    /** Mỗi phần tử: một dòng nguyên liệu, ví dụ "200g thịt bò" */
+    ingredients: { type: [String], default: [] },
+    /** Các bước nấu theo thứ tự */
+    steps: { type: [String], default: [] },
   },
   { timestamps: true }
 );
