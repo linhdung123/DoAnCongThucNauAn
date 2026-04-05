@@ -9,9 +9,13 @@ const recipeSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
     description: { type: String, default: '' },
+    /** Mỗi phần tử: một dòng nguyên liệu, ví dụ "200g thịt bò" */
     ingredients: { type: [String], default: [] },
+    /** Các bước nấu theo thứ tự */
     steps: { type: [String], default: [] },
-    cookTime: { type: Number, default: null },
+    /** Thời gian nấu (phút) — Top món & form TV C */
+    cookTime: { type: Number, default: null, min: 0 },
+    /** easy | medium | hard — đề bài TV C */
     difficulty: {
       type: String,
       enum: ['easy', 'medium', 'hard'],

@@ -1,0 +1,81 @@
+<%- include('../layout/header') %>
+
+<div class="favorites-page">
+  <div class="container favorites-inner">
+    <h1 class="favorites-hero-title">Món ăn yêu thích của tôi</h1>
+
+    <% if (!favorites || favorites.length === 0) { %>
+      <p class="favorites-empty">Bạn chưa lưu công thức nào. Hãy vào trang chi tiết món và nhấn <strong>Thêm yêu thích</strong>.</p>
+      <p class="favorites-empty-actions"><a class="btn-fav-outline" href="/list">Xem danh sách công thức</a></p>
+    <% } else { %>
+      <ul class="favorites-grid card-grid" role="list">
+        <% favorites.forEach(function (f) { 
+          const r = f.recipeId;
+          const rid = r && r._id ? r._id : '';
+          const img = r && r.image ? r.image : '';
+        %>
+          <li class="favorites-card recipe-card" data-recipe-id="<%= rid %>">
+            <a class="card-link" href="/list/<%= rid %>">
+              <div class="card-image-wrap">
+                <% if (img) { %>
+                  <img src="<%= img %>" alt="" loading="lazy" />
+                <% } else { %>
+                  <div class="card-placeholder" aria-hidden="true">🍽️</div>
+                <% } %>
+              </div>
+              <div class="card-body">
+                <% if (r && r.category) { %>
+                  <span class="card-category"><%= r.category %></span>
+                <% } %>
+                <h2 class="card-title"><%= r && r.title ? r.title : 'Công thức' %></h2>
+                <% if (r && r.description) { %>
+                  <p class="card-desc"><%= r.description %></p>
+                <% } %>
+              </div>
+            </a>
+            <div class="favorites-card-actions">
+              <button type="button" class="fav-pill fav-pill--saved js-fav-toggle" data-recipe-id="<%= rid %>" aria-pressed="true">
+                Đã yêu thích
+              </button>
+            </div>
+          </li>
+        <% }); %>
+      </ul>
+    <% } %>
+  </div>
+</div>
+
+<script>
+(function () {
+  document.querySelectorAll('.js-fav-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      var id = btn.getAttribute('data-recipe-id');
+      if (!id) return;
+      btn.disabled = true;
+      fetch('/favorites/toggle/' + id, { method: 'POST', credentials: 'same-origin' })
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (_ref) {
+          if (!_ref.ok) throw new Error((_ref.j && _ref.j.message) || 'Lỗi');
+          var favorited = _ref.j.favorited;
+          if (!favorited) {
+            var card = btn.closest('.favorites-card');
+            if (card) card.remove();
+            if (!document.querySelector('.favorites-card')) {
+              window.location.reload();
+            }
+          } else {
+            btn.classList.add('fav-pill--saved');
+            btn.classList.remove('fav-pill--add');
+            btn.textContent = 'Đã yêu thích';
+            btn.setAttribute('aria-pressed', 'true');
+          }
+        })
+        .catch(function () { alert('Không thể cập nhật. Bạn cần đăng nhập.'); })
+        .finally(function () { btn.disabled = false; });
+    });
+  });
+})();
+</script>
+
+<%- include('../layout/footer') %>

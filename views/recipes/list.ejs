@@ -1,0 +1,51 @@
+<%- include('../layout/header') %>
+
+<section class="section">
+  <div class="container">
+    <h1 class="section-title">Công thức</h1>
+    <p class="section-sub">Lọc theo danh mục hoặc xem toàn bộ</p>
+
+    <ul class="category-chips list-page-filters" aria-label="Lọc danh mục">
+      <li>
+        <a class="chip<%= !activeCategory ? ' chip-active' : '' %>" href="/list">Tất cả</a>
+      </li>
+      <% categories.forEach(function (cat) { %>
+        <li>
+          <a
+            class="chip<%= activeCategory === cat ? ' chip-active' : '' %>"
+            href="/list?category=<%= encodeURIComponent(cat) %>"
+          ><%= cat %></a>
+        </li>
+      <% }); %>
+    </ul>
+
+    <% if (!recipes || recipes.length === 0) { %>
+      <p class="empty-hint">Chưa có công thức nào trong mục này.</p>
+    <% } else { %>
+      <div class="card-grid">
+        <% recipes.forEach(function (recipe) { %>
+          <article class="recipe-card">
+            <a href="/list/<%= recipe._id %>" class="card-link">
+              <div class="card-image-wrap">
+                <% if (recipe.image) { %>
+                  <img src="<%= recipe.image %>" alt="" loading="lazy" />
+                <% } else { %>
+                  <div class="card-placeholder" aria-hidden="true">🍽️</div>
+                <% } %>
+              </div>
+              <div class="card-body">
+                <span class="card-category"><%= recipe.category || 'Món ăn' %></span>
+                <h2 class="card-title"><%= recipe.title %></h2>
+                <% if (recipe.description) { %>
+                  <p class="card-desc"><%= recipe.description.length > 120 ? recipe.description.slice(0, 120) + '…' : recipe.description %></p>
+                <% } %>
+              </div>
+            </a>
+          </article>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('../layout/footer') %>
