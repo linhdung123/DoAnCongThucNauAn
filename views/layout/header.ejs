@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= typeof title !== 'undefined' ? title : 'Công thức nấu ăn' %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo">🍳 Công thức hay</a>
+      <form class="header-search" action="/search" method="get" role="search">
+        <label class="visually-hidden" for="q">Tìm công thức</label>
+        <input type="search" id="q" name="q" placeholder="Tìm món, nguyên liệu…" autocomplete="off" />
+        <button type="submit">Tìm</button>
+      </form>
+      <nav class="main-nav" aria-label="Chính">
+        <a href="/">Trang chủ</a>
+        <a href="/list">Công thức</a>
+        <a href="/auth">Đăng nhập</a>
+        <a href="/profile">Hồ sơ</a>
+      </nav>
+    </div>
+  </header>
+  <main class="site-main">
