@@ -1,0 +1,206 @@
+<% 
+  const rid = typeof recipeId !== 'undefined' && recipeId ? String(recipeId) : '';
+%>
+<section class="rating-section" id="rating-section-root" data-recipe-id="<%= rid %>" aria-labelledby="rating-heading">
+  <h2 class="rating-heading" id="rating-heading">Yêu thích &amp; đánh giá</h2>
+
+  <div class="rating-toolbar">
+    <button type="button" class="fav-pill fav-pill--add js-detail-fav" data-recipe-id="<%= rid %>" aria-pressed="false" hidden>
+      Thêm yêu thích
+    </button>
+    <p class="rating-login-hint js-rating-login-hint" hidden>
+      <a class="js-rating-auth-link" href="/auth">Đăng nhập</a> để lưu yêu thích và gửi đánh giá.
+    </p>
+  </div>
+
+  <div class="rating-summary js-rating-summary" aria-live="polite">
+    <span class="rating-stars-display js-rating-avg-stars" aria-hidden="true"></span>
+    <span class="rating-avg-text js-rating-avg-text">Chưa có đánh giá</span>
+  </div>
+
+  <form class="rating-form js-rating-form" hidden>
+    <fieldset>
+      <legend class="visually-hidden">Chọn số sao</legend>
+      <div class="star-input" role="group" aria-label="Số sao từ 1 đến 5">
+        <% for (let s = 1; s <= 5; s++) { %>
+          <label class="star-label">
+            <input type="radio" name="stars" value="<%= s %>" class="js-star" <%= s === 5 ? 'checked' : '' %> />
+            <span class="star-visual" aria-hidden="true"><%= s %>★</span>
+          </label>
+        <% } %>
+      </div>
+      <label for="rating-comment-<%= rid %>">Nhận xét (tùy chọn)</label>
+      <textarea id="rating-comment-<%= rid %>" class="js-rating-comment" name="comment" rows="3" maxlength="2000" placeholder="Chia sẻ cảm nhận của bạn…"></textarea>
+      <div class="rating-form-actions">
+        <button type="submit" class="btn-fav-primary">Gửi đánh giá</button>
+        <button type="button" class="btn-fav-ghost js-delete-my-rating" hidden>Xóa đánh giá của tôi</button>
+      </div>
+      <p class="form-message js-rating-form-msg" role="status"></p>
+    </fieldset>
+  </form>
+
+  <ul class="rating-list js-rating-list" role="list"></ul>
+</section>
+
+<script>
+(function () {
+  var root = document.getElementById('rating-section-root');
+  if (!root) return;
+  var recipeId = root.getAttribute('data-recipe-id');
+  if (!recipeId) return;
+
+  var favBtn = root.querySelector('.js-detail-fav');
+  var loginHint = root.querySelector('.js-rating-login-hint');
+  var form = root.querySelector('.js-rating-form');
+  var listEl = root.querySelector('.js-rating-list');
+  var avgStars = root.querySelector('.js-rating-avg-stars');
+  var avgText = root.querySelector('.js-rating-avg-text');
+  var msg = root.querySelector('.js-rating-form-msg');
+  var delBtn = root.querySelector('.js-delete-my-rating');
+  var commentEl = root.querySelector('.js-rating-comment');
+  var authLink = root.querySelector('.js-rating-auth-link');
+  if (authLink) {
+    authLink.href = '/auth?next=' + encodeURIComponent(window.location.pathname + window.location.search);
+  }
+
+  function renderStars(n) {
+    var full = '★';
+    var empty = '☆';
+    var out = '';
+    for (var i = 1; i <= 5; i++) out += i <= n ? full : empty;
+    return out;
+  }
+
+  function setFavButton(favorited) {
+    if (!favBtn) return;
+    favBtn.hidden = false;
+    favBtn.setAttribute('aria-pressed', favorited ? 'true' : 'false');
+    favBtn.classList.toggle('fav-pill--saved', favorited);
+    favBtn.classList.toggle('fav-pill--add', !favorited);
+    favBtn.textContent = favorited ? 'Đã yêu thích' : 'Thêm yêu thích';
+  }
+
+  function load() {
+    fetch('/favorites/ratings/' + recipeId, { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.authenticated) {
+          loginHint.hidden = true;
+          favBtn.hidden = false;
+          setFavButton(!!(data.viewer && data.viewer.favorited));
+          form.hidden = false;
+          if (data.viewer && data.viewer.myRating) {
+            var mr = data.viewer.myRating;
+            var starInput = root.querySelector('.js-star[value="' + mr.stars + '"]');
+            if (starInput) starInput.checked = true;
+            commentEl.value = mr.comment || '';
+            delBtn.hidden = false;
+            delBtn.setAttribute('data-rating-id', mr._id);
+          } else {
+            delBtn.hidden = true;
+            delBtn.removeAttribute('data-rating-id');
+          }
+        } else {
+          loginHint.hidden = false;
+          favBtn.hidden = true;
+          form.hidden = true;
+        }
+
+        if (data.average != null && data.count) {
+          avgStars.textContent = renderStars(Math.round(data.average));
+          avgText.textContent = data.average + '/5 — ' + data.count + ' đánh giá';
+        } else {
+          avgStars.textContent = '';
+          avgText.textContent = 'Chưa có đánh giá';
+        }
+
+        listEl.innerHTML = '';
+        (data.ratings || []).forEach(function (r) {
+          var li = document.createElement('li');
+          li.className = 'rating-item';
+          var name = (r.userId && r.userId.username) ? escapeHtml(r.userId.username) : 'Người dùng';
+          var date = r.createdAt ? new Date(r.createdAt).toLocaleString('vi-VN') : '';
+          li.innerHTML =
+            '<div class="rating-item-head"><strong>' + name + '</strong> ' +
+            '<span class="rating-item-stars">' + renderStars(r.stars) + '</span>' +
+            '<time class="rating-item-time">' + date + '</time></div>' +
+            (r.comment ? '<p class="rating-item-comment">' + escapeHtml(r.comment) + '</p>' : '');
+          listEl.appendChild(li);
+        });
+      })
+      .catch(function () {
+        avgText.textContent = 'Không tải được đánh giá.';
+      });
+  }
+
+  function escapeHtml(s) {
+    var d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  if (favBtn) {
+    favBtn.addEventListener('click', function () {
+      favBtn.disabled = true;
+      fetch('/favorites/toggle/' + recipeId, { method: 'POST', credentials: 'same-origin' })
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (x) {
+          if (!x.ok) throw new Error();
+          setFavButton(x.j.favorited);
+        })
+        .catch(function () { msg.textContent = 'Cần đăng nhập để lưu yêu thích.'; })
+        .finally(function () { favBtn.disabled = false; });
+    });
+  }
+
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var checked = root.querySelector('.js-star:checked');
+      var stars = checked ? Number(checked.value) : 0;
+      var body = new URLSearchParams();
+      body.set('stars', String(stars));
+      body.set('comment', commentEl.value || '');
+      msg.textContent = '';
+      fetch('/favorites/rating/' + recipeId, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+      })
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (x) {
+          if (!x.ok) {
+            msg.textContent = (x.j && x.j.message) || 'Không gửi được.';
+            return;
+          }
+          msg.textContent = 'Đã lưu đánh giá.';
+          delBtn.hidden = false;
+          if (x.j.rating && x.j.rating._id) delBtn.setAttribute('data-rating-id', x.j.rating._id);
+          load();
+        })
+        .catch(function () { msg.textContent = 'Lỗi mạng hoặc cần đăng nhập.'; });
+    });
+  }
+
+  if (delBtn) {
+    delBtn.addEventListener('click', function () {
+      var id = delBtn.getAttribute('data-rating-id');
+      if (!id) return;
+      delBtn.disabled = true;
+      fetch('/favorites/rating/' + id, { method: 'DELETE', credentials: 'same-origin' })
+        .then(function (r) {
+          if (!r.ok) throw new Error();
+          commentEl.value = '';
+          delBtn.hidden = true;
+          msg.textContent = 'Đã xóa đánh giá.';
+          load();
+        })
+        .catch(function () { msg.textContent = 'Không xóa được.'; })
+        .finally(function () { delBtn.disabled = false; });
+    });
+  }
+
+  load();
+})();
+</script>
