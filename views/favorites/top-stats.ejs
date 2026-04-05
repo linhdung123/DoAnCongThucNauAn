@@ -1,0 +1,69 @@
+<%
+  function formatCount(n) {
+    if (n == null || isNaN(n)) return '0';
+    return Number(n).toLocaleString('vi-VN');
+  }
+  function difficultyLabel(d) {
+    if (d === 'hard') return '🔥 Khó';
+    if (d === 'medium') return '🔥 TB';
+    return '🔥 Dễ';
+  }
+%>
+<%- include('../layout/header') %>
+
+<div class="top-stats-page">
+  <div class="container top-stats-inner">
+    <h1 class="top-stats-title">Top món ăn được yêu thích nhất</h1>
+
+    <% if (!topItems || topItems.length === 0) { %>
+      <p class="top-stats-empty">
+        Chưa có đủ dữ liệu. Khi người dùng lưu yêu thích công thức, bảng xếp hạng sẽ hiển thị tại đây.
+      </p>
+      <p class="top-stats-empty-actions"><a class="top-stats-link" href="/list">Xem tất cả công thức</a></p>
+    <% } else { %>
+      <ul class="top-stats-grid" role="list">
+        <% topItems.forEach(function (row, idx) {
+          const r = row.recipe;
+          const rid = r && r._id ? r._id : '';
+          const img = r && r.image ? r.image : '';
+          const avg = row.avgRating;
+        %>
+          <li class="top-card">
+            <div class="top-card-media">
+              <% if (img) { %>
+                <img src="<%= img %>" alt="" loading="lazy" />
+              <% } else { %>
+                <div class="top-card-media-placeholder" aria-hidden="true">🍽️</div>
+              <% } %>
+              <span class="top-card-rank" aria-label="Hạng <%= idx + 1 %>">🏆</span>
+            </div>
+            <div class="top-card-body">
+              <h2 class="top-card-title"><%= r && r.title ? r.title : 'Công thức' %></h2>
+              <div class="top-card-meta-row">
+                <% if (avg != null) { %>
+                  <span class="top-card-stars">⭐ <%= avg %>/5</span>
+                <% } else { %>
+                  <span class="top-card-stars top-card-stars--muted">⭐ —/5</span>
+                <% } %>
+                <span class="top-card-fav-count" title="Số lượt yêu thích"><%= formatCount(row.favoriteCount) %></span>
+              </div>
+              <div class="top-card-meta-row top-card-meta-row--secondary">
+                <span class="top-card-time">
+                  <% if (r.cookTime != null && r.cookTime !== '') { %>
+                    ⏱ <%= r.cookTime %> phút
+                  <% } else { %>
+                    ⏱ —
+                  <% } %>
+                </span>
+                <span class="top-card-diff"><%= difficultyLabel(r.difficulty) %></span>
+              </div>
+              <a class="top-card-watch" href="/list/<%= rid %>">Watch</a>
+            </div>
+          </li>
+        <% }); %>
+      </ul>
+    <% } %>
+  </div>
+</div>
+
+<%- include('../layout/footer') %>

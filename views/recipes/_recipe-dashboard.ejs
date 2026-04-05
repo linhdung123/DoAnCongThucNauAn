@@ -1,0 +1,823 @@
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Roboto:wght@500;700&display=swap" rel="stylesheet" />
+
+<style>
+  .recipe-manage {
+    --cd-page: #fff3e0;
+    --cd-nav-bg: #f0ebe1;
+    --cd-dark: #262522;
+    --cd-dark-08: rgba(38, 37, 34, 0.08);
+    --cd-dark-24: rgba(38, 37, 34, 0.24);
+    --cd-card-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    --cd-save: #6bfb37;
+    --cd-cancel: #ef410c;
+    --cd-muted: #5c5c5c;
+    font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+    background: var(--cd-page);
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    padding: 1.375rem 0 3rem;
+    box-sizing: border-box;
+  }
+
+  .recipe-manage .cd-manage-nav-wrap {
+    width: min(1312px, calc(100% - 2rem));
+    margin: 0 auto 1.75rem;
+  }
+
+  .recipe-manage .cd-manage-nav {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    padding: 16px 24px;
+    background: var(--cd-nav-bg);
+    border: 1px solid var(--cd-dark-24);
+    border-radius: 32px;
+  }
+
+  .recipe-manage .cd-nav-brand {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--cd-dark);
+    flex-shrink: 0;
+  }
+
+  .recipe-manage .cd-nav-logo {
+    width: 40px;
+    height: 35px;
+    border-radius: 10px;
+    border: 0.5px solid rgba(38, 38, 38, 0.5);
+    background: linear-gradient(135deg, #ffd89b 0%, #ff9a56 100%);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+    flex-shrink: 0;
+  }
+
+  .recipe-manage .cd-nav-brand-text {
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.05;
+    max-width: 7.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .recipe-manage .cd-nav-links {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .recipe-manage .cd-nav-links a {
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--cd-dark);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .recipe-manage .cd-nav-links a:hover {
+    opacity: 0.75;
+  }
+
+  .recipe-manage .cd-nav-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  .recipe-manage .cd-nav-search-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 37px;
+    height: 37px;
+    padding: 8px;
+    background: var(--cd-dark-08);
+    border-radius: 16px;
+    color: var(--cd-dark);
+    text-decoration: none;
+    box-sizing: border-box;
+  }
+
+  .recipe-manage .cd-nav-search-btn:hover {
+    background: rgba(38, 37, 34, 0.14);
+  }
+
+  .recipe-manage .cd-nav-search-btn svg {
+    width: 21px;
+    height: 21px;
+  }
+
+  .recipe-manage .cd-nav-login {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 24px;
+    min-height: 38px;
+    background: var(--cd-dark);
+    border-radius: 24px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--cd-nav-bg);
+    text-decoration: none;
+    box-sizing: border-box;
+  }
+
+  .recipe-manage .cd-nav-login:hover {
+    filter: brightness(1.08);
+  }
+
+  .recipe-manage .manage-inner {
+    width: min(1312px, calc(100% - 2rem));
+    margin: 0 auto;
+  }
+
+  .recipe-manage .manage-head {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .recipe-manage .manage-head h1 {
+    margin: 0 0 0.5rem;
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.75rem, 4.5vw, 3.125rem);
+    line-height: 1.15;
+    color: #000;
+  }
+
+  .recipe-manage .manage-head p {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.4;
+    color: #000;
+  }
+
+  .recipe-manage .manage-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 394px) 1fr;
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    align-items: start;
+  }
+
+  @media (max-width: 1024px) {
+    .recipe-manage .manage-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .recipe-manage .panel-form {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: var(--cd-card-shadow);
+    padding: 0;
+    overflow: hidden;
+    border: none;
+  }
+
+  .recipe-manage .cd-form-tab {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 24px;
+    margin: 1.25rem 1.25rem 0;
+    background: var(--cd-nav-bg);
+    border: 1px solid var(--cd-dark);
+    border-radius: 24px;
+    box-sizing: border-box;
+  }
+
+  .recipe-manage .cd-form-tab span {
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.2;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--cd-dark);
+  }
+
+  .recipe-manage .cd-form-body {
+    padding: 1.25rem 1.25rem 1.75rem;
+  }
+
+  .recipe-manage .field {
+    margin-bottom: 1rem;
+  }
+
+  .recipe-manage .field label {
+    display: block;
+    font-weight: 500;
+    font-size: 0.82rem;
+    margin-bottom: 0.35rem;
+    color: var(--cd-dark);
+  }
+
+  .recipe-manage .field input[type="text"],
+  .recipe-manage .field input[type="number"],
+  .recipe-manage .field input[type="file"],
+  .recipe-manage .field select,
+  .recipe-manage .field textarea {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid rgba(38, 37, 34, 0.2);
+    border-radius: 10px;
+    font: inherit;
+    box-sizing: border-box;
+    background: #fff;
+  }
+
+  .recipe-manage .field textarea {
+    min-height: 88px;
+    resize: vertical;
+    font-size: 16px;
+    line-height: 1.25;
+  }
+
+  .recipe-manage .field-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 520px) {
+    .recipe-manage .field-row-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .recipe-manage .ing-block h3,
+  .recipe-manage .steps-block h3 {
+    margin: 0 0 0.65rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--cd-dark);
+  }
+
+  .recipe-manage .ing-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
+  }
+
+  .recipe-manage .ing-row input {
+    padding: 0.5rem 0.65rem;
+    border: 1px solid rgba(38, 37, 34, 0.2);
+    border-radius: 10px;
+    font: inherit;
+  }
+
+  .recipe-manage .btn-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: none;
+    background: var(--cd-nav-bg);
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    color: var(--cd-muted);
+  }
+
+  .recipe-manage .btn-icon:hover {
+    background: #e4ddd0;
+    color: var(--cd-dark);
+  }
+
+  .recipe-manage .btn-add-row {
+    margin-top: 0.35rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid var(--cd-dark-24);
+    background: rgba(38, 37, 34, 0.06);
+    color: var(--cd-dark);
+    font-weight: 600;
+    font-size: 0.78rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .recipe-manage .step-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .recipe-manage .step-row span {
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: var(--cd-dark);
+    color: var(--cd-nav-bg);
+    font-weight: 700;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.45rem;
+  }
+
+  .recipe-manage .step-row textarea {
+    flex: 1;
+    min-height: 52px;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid rgba(38, 37, 34, 0.2);
+    border-radius: 10px;
+    font: inherit;
+    resize: vertical;
+    font-size: 16px;
+  }
+
+  .recipe-manage .form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    align-items: center;
+  }
+
+  .recipe-manage .btn-save {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 16px;
+    min-width: 7rem;
+    min-height: 40px;
+    border-radius: 100px;
+    border: none;
+    background: var(--cd-save);
+    color: #000;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.25;
+    letter-spacing: 0.006em;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+  }
+
+  .recipe-manage .btn-save:hover {
+    filter: brightness(1.04);
+  }
+
+  .recipe-manage .btn-cancel {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 16px;
+    min-height: 40px;
+    border-radius: 100px;
+    border: none;
+    background: var(--cd-cancel);
+    color: #000;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.25;
+    letter-spacing: 0.006em;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+  }
+
+  .recipe-manage .btn-cancel:hover {
+    filter: brightness(1.05);
+  }
+
+  .recipe-manage .alert-error {
+    background: #ffe8e4;
+    color: #9a2c2c;
+    padding: 0.65rem 0.85rem;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .recipe-manage .thumb-preview {
+    margin-top: 0.35rem;
+    max-width: 100%;
+    max-height: 160px;
+    border-radius: 16px;
+    object-fit: cover;
+    border: 1px solid rgba(38, 37, 34, 0.15);
+  }
+
+  .recipe-manage .panel-list {
+    background: transparent;
+  }
+
+  .recipe-manage .panel-list h2 {
+    margin: 0 0 1rem;
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cd-dark);
+    text-align: center;
+  }
+
+  .recipe-manage .mini-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 640px) {
+    .recipe-manage .mini-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .recipe-manage .mini-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--cd-card-shadow);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .recipe-manage .mini-card .img-wrap {
+    aspect-ratio: 269 / 158;
+    background: #e8e4de;
+  }
+
+  .recipe-manage .mini-card .img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 0;
+  }
+
+  .recipe-manage .mini-card .img-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    background: linear-gradient(145deg, #f0ebe4, #e0d8ce);
+  }
+
+  .recipe-manage .mini-card .mini-body {
+    padding: 0.75rem 0.85rem 1rem;
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .recipe-manage .mini-card .mini-title {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.2;
+    color: #000;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .recipe-manage .mini-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .recipe-manage .mini-actions a.cd-action-edit,
+  .recipe-manage .mini-actions button.cd-action-del {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.2;
+    color: #000;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    text-decoration: none;
+  }
+
+  .recipe-manage .mini-actions a.cd-action-edit:hover,
+  .recipe-manage .mini-actions button.cd-action-del:hover {
+    opacity: 0.7;
+  }
+
+  .recipe-manage .mini-actions form {
+    display: inline;
+    margin: 0;
+  }
+
+  .recipe-manage .empty-my {
+    color: var(--cd-muted);
+    font-size: 0.95rem;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: var(--cd-card-shadow);
+  }
+</style>
+
+<section class="recipe-manage" aria-labelledby="manage-title">
+  <div class="cd-manage-nav-wrap">
+    <div class="cd-manage-nav">
+      <a href="/" class="cd-nav-brand">
+        <span class="cd-nav-logo" aria-hidden="true"></span>
+        <span class="cd-nav-brand-text">Cooks Delight</span>
+      </a>
+      <ul class="cd-nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/list">Recipes</a></li>
+        <li><a href="/tips">Tips</a></li>
+        <li><a href="/list">Blog</a></li>
+        <li><a href="/">About</a></li>
+      </ul>
+      <div class="cd-nav-actions">
+        <a href="/search" class="cd-nav-search-btn" aria-label="Tìm kiếm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="M20 20l-4.3-4.3" stroke-linecap="round" />
+          </svg>
+        </a>
+        <a href="/auth" class="cd-nav-login">Đăng nhập</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="manage-inner">
+    <header class="manage-head">
+      <h1 id="manage-title"><%= typeof pageHeading !== 'undefined' ? pageHeading : 'QUẢN LÝ MÓN ĂN' %></h1>
+      <p><%= typeof pageSubheading !== 'undefined' ? pageSubheading : 'Thêm và chỉnh sửa món ăn' %></p>
+    </header>
+
+    <div class="manage-grid">
+      <div class="panel-form">
+        <div class="cd-form-tab">
+          <span>Nhập thông tin và hướng dẫn nấu ăn</span>
+        </div>
+
+        <div class="cd-form-body">
+          <% if (typeof error === 'string' && error) { %>
+            <p class="alert-error" role="alert"><%= error %></p>
+          <% } %>
+
+          <form
+            class="recipe-form"
+            method="post"
+            action="<%= formAction %>"
+            enctype="multipart/form-data"
+            novalidate
+          >
+            <div class="field">
+              <label for="title">Tên món ăn</label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                required
+                placeholder="Ví dụ: Cánh Gà Chiên Nước Mắm"
+                value="<%= typeof form !== 'undefined' && form.title != null ? form.title : '' %>"
+              />
+            </div>
+
+            <div class="field">
+              <label for="description">Mô tả món ăn</label>
+              <textarea
+                id="description"
+                name="description"
+                rows="2"
+                placeholder="Ví dụ: Món ăn đậm đà"
+              ><%= typeof form !== 'undefined' && form.description != null ? form.description : '' %></textarea>
+            </div>
+
+            <div class="field-row-2">
+              <div class="field">
+                <label for="category">Danh mục</label>
+                <select id="category" name="category">
+                  <% 
+                    var cats = categories || [];
+                    var selCat = (form && form.category) ? String(form.category) : (cats[0] || '');
+                  %>
+                  <% cats.forEach(function (cat) { %>
+                    <option value="<%= cat %>" <%= selCat === cat ? 'selected' : '' %>><%= cat %></option>
+                  <% }); %>
+                </select>
+              </div>
+              <div class="field">
+                <label for="difficulty">Độ khó</label>
+                <select id="difficulty" name="difficulty">
+                  <% 
+                    var d = (form && form.difficulty) ? form.difficulty : 'medium';
+                  %>
+                  <option value="easy" <%= d === 'easy' ? 'selected' : '' %>>Dễ</option>
+                  <option value="medium" <%= d === 'medium' ? 'selected' : '' %>>Trung bình</option>
+                  <option value="hard" <%= d === 'hard' ? 'selected' : '' %>>Khó</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="cookTime">Thời gian nấu (phút)</label>
+              <input
+                type="number"
+                id="cookTime"
+                name="cookTime"
+                min="0"
+                step="1"
+                placeholder="30"
+                value="<%= typeof form !== 'undefined' && form.cookTime != null && form.cookTime !== '' ? form.cookTime : '' %>"
+              />
+            </div>
+
+            <div class="field">
+              <label for="image">Ảnh món ăn</label>
+              <input type="file" id="image" name="image" accept="image/*" />
+              <% if (typeof currentImage === 'string' && currentImage) { %>
+                <p style="margin:0.35rem 0 0;font-size:0.78rem;color:var(--cd-muted);">Ảnh hiện tại:</p>
+                <img class="thumb-preview" src="<%= currentImage %>" alt="" />
+              <% } %>
+            </div>
+
+            <div class="ing-block field">
+              <h3>Nguyên liệu</h3>
+              <div id="ingredient-rows">
+                <% (ingredientRows || [{ name: '', qty: '' }]).forEach(function (row) { %>
+                  <div class="ing-row">
+                    <input type="text" name="ingredientName" placeholder="Ví dụ: Thịt gà" value="<%= row.name %>" />
+                    <input type="text" name="ingredientQty" placeholder="Ví dụ: 500g" value="<%= row.qty %>" />
+                    <button type="button" class="btn-icon btn-rm-ing" title="Xóa dòng" aria-label="Xóa dòng">×</button>
+                  </div>
+                <% }); %>
+              </div>
+              <button type="button" class="btn-add-row" id="add-ing">+ Thêm nguyên liệu</button>
+            </div>
+
+            <div class="steps-block field">
+              <h3>Hướng dẫn nấu</h3>
+              <div id="step-rows">
+                <% (stepRows || ['']).forEach(function (st, idx) { %>
+                  <div class="step-row">
+                    <span><%= idx + 1 %></span>
+                    <textarea name="step" rows="2" placeholder="Bước <%= idx + 1 %>: …"><%= st %></textarea>
+                    <button type="button" class="btn-icon btn-rm-step" title="Xóa bước" aria-label="Xóa bước">×</button>
+                  </div>
+                <% }); %>
+              </div>
+              <button type="button" class="btn-add-row" id="add-step">+ Thêm bước</button>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-save">Lưu món ăn</button>
+              <% if (typeof editingId !== 'undefined' && editingId) { %>
+                <a class="btn-cancel" href="/recipes/create">Huỷ</a>
+              <% } else { %>
+                <button type="button" class="btn-cancel" id="btn-reset-form">Huỷ</button>
+              <% } %>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="panel-list">
+        <h2>Món của bạn</h2>
+        <% if (!myRecipes || myRecipes.length === 0) { %>
+          <p class="empty-my">Chưa có món nào. Hãy thêm công thức đầu tiên bên trái.</p>
+        <% } else { %>
+          <div class="mini-grid">
+            <% myRecipes.forEach(function (r) { %>
+              <article class="mini-card">
+                <div class="img-wrap">
+                  <% if (r.image) { %>
+                    <img src="<%= r.image %>" alt="" loading="lazy" />
+                  <% } else { %>
+                    <div class="img-placeholder" aria-hidden="true">🍽️</div>
+                  <% } %>
+                </div>
+                <div class="mini-body">
+                  <h3 class="mini-title"><%= r.title %></h3>
+                  <div class="mini-actions">
+                    <a href="/recipes/<%= r._id %>/edit" class="cd-action-edit">✏️ Sửa</a>
+                    <form
+                      method="post"
+                      action="/recipes/<%= r._id %>/delete"
+                      onsubmit="return confirm('Xóa món này?');"
+                    >
+                      <button type="submit" class="cd-action-del">🗑️ Xóa</button>
+                    </form>
+                  </div>
+                </div>
+              </article>
+            <% }); %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  var ingWrap = document.getElementById('ingredient-rows');
+  var stepWrap = document.getElementById('step-rows');
+  var addIng = document.getElementById('add-ing');
+  var addStep = document.getElementById('add-step');
+  var resetBtn = document.getElementById('btn-reset-form');
+
+  function renumberSteps() {
+    if (!stepWrap) return;
+    var rows = stepWrap.querySelectorAll('.step-row');
+    rows.forEach(function (row, i) {
+      var badge = row.querySelector('span');
+      if (badge) badge.textContent = String(i + 1);
+      var ta = row.querySelector('textarea');
+      if (ta) ta.placeholder = 'Bước ' + (i + 1) + ': …';
+    });
+  }
+
+  if (addIng && ingWrap) {
+    addIng.addEventListener('click', function () {
+      var div = document.createElement('div');
+      div.className = 'ing-row';
+      div.innerHTML =
+        '<input type="text" name="ingredientName" placeholder="Tên nguyên liệu" />' +
+        '<input type="text" name="ingredientQty" placeholder="Số lượng" />' +
+        '<button type="button" class="btn-icon btn-rm-ing" title="Xóa dòng" aria-label="Xóa dòng">×</button>';
+      ingWrap.appendChild(div);
+    });
+  }
+
+  if (addStep && stepWrap) {
+    addStep.addEventListener('click', function () {
+      var div = document.createElement('div');
+      div.className = 'step-row';
+      div.innerHTML =
+        '<span>0</span>' +
+        '<textarea name="step" rows="2" placeholder="Bước …"></textarea>' +
+        '<button type="button" class="btn-icon btn-rm-step" title="Xóa bước" aria-label="Xóa bước">×</button>';
+      stepWrap.appendChild(div);
+      renumberSteps();
+    });
+  }
+
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.btn-rm-ing')) {
+      var row = e.target.closest('.ing-row');
+      if (row && ingWrap && ingWrap.querySelectorAll('.ing-row').length > 1) row.remove();
+    }
+    if (e.target.closest('.btn-rm-step')) {
+      var srow = e.target.closest('.step-row');
+      if (srow && stepWrap && stepWrap.querySelectorAll('.step-row').length > 1) {
+        srow.remove();
+        renumberSteps();
+      }
+    }
+  });
+
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function () {
+      window.location.href = '/recipes/create';
+    });
+  }
+})();
+</script>

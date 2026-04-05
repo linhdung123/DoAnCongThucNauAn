@@ -9,8 +9,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
 </head>
-<body>
+<body<% if (typeof bodyClass !== 'undefined' && bodyClass) { %> class="<%= bodyClass %>"<% } %>>
+  <% var _hideHeader = typeof hideSiteHeader !== 'undefined' && hideSiteHeader; %>
+  <% if (!_hideHeader) { %>
   <header class="site-header">
+<<<<<<< HEAD
     <div class="container header-shell">
       <div class="header-bar">
         <a href="/" class="brand" aria-label="Cooks Delight — Trang chủ">
@@ -42,6 +45,24 @@
           <a href="/profile" class="btn-profile">Cá nhân</a>
         </div>
       </div>
+=======
+    <div class="container header-inner">
+      <a href="/" class="logo">🍳 Công thức hay</a>
+      <form class="header-search" action="/search" method="get" role="search">
+        <label class="visually-hidden" for="q">Tìm công thức</label>
+        <input type="search" id="q" name="q" placeholder="Tìm món, nguyên liệu…" autocomplete="off" />
+        <button type="submit">Tìm</button>
+      </form>
+      <nav class="main-nav" aria-label="Chính">
+        <a href="/">Trang chủ</a>
+        <a href="/list">Công thức</a>
+        <a href="/favorites/top">Top món</a>
+        <a href="/favorites/my-favorites">Yêu thích</a>
+        <a href="/auth">Đăng nhập</a>
+        <a href="/profile">Hồ sơ</a>
+      </nav>
+>>>>>>> a4209a63b5773edb7a1f018741664b47e9b488c3
     </div>
   </header>
-  <main class="site-main">
+  <% } %>
+  <main class="site-main<% if (typeof mainClass !== 'undefined' && mainClass) { %> <%= mainClass %><% } %>">

@@ -1,0 +1,292 @@
+/* Giao diện auth — chuyển từ Figma (màu #F9ECD4, thanh #D9D9D9, khối trắng mờ) sang layout responsive */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,700;1,100&family=Roboto:ital,wght@0,400;0,700;1,300;1,400&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.auth-page {
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Roboto', system-ui, sans-serif;
+  background: #f9ecd4;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-topbar {
+  flex-shrink: 0;
+  min-height: 111px;
+  background: #d9d9d9;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.auth-topbar-inner {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.auth-chef {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  line-height: 1;
+  user-select: none;
+}
+
+.auth-welcome {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.25rem, 4vw, 2.5rem);
+  line-height: 1.1;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.auth-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem 3rem;
+}
+
+.auth-panel {
+  width: min(723px, 100%);
+  position: relative;
+}
+
+.auth-panel::before {
+  content: '';
+  position: absolute;
+  inset: -2rem -12%;
+  background: #fff;
+  opacity: 0.4;
+  border-radius: 4px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.auth-panel-inner {
+  position: relative;
+  z-index: 1;
+  padding: 0.5rem 0 1rem;
+}
+
+.auth-subtitle {
+  margin: 0 0 1.75rem;
+  font-family: 'Roboto', sans-serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  line-height: 1.2;
+  text-align: center;
+}
+
+.auth-field {
+  margin-bottom: 1.25rem;
+}
+
+.auth-field-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  padding-left: 0.25rem;
+  font-family: 'Inter', sans-serif;
+  font-style: italic;
+  font-weight: 100;
+  font-size: clamp(1rem, 2.5vw, 1.35rem);
+}
+
+.auth-input-wrap {
+  display: flex;
+  align-items: stretch;
+  background: #d9d9d9;
+  border-radius: 2px;
+  min-height: 56px;
+  overflow: hidden;
+}
+
+.auth-input-wrap:focus-within {
+  outline: 2px solid rgba(0, 0, 0, 0.2);
+  outline-offset: 2px;
+}
+
+.auth-input-icon {
+  flex-shrink: 0;
+  width: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1e1e1e;
+}
+
+.auth-input-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.auth-input-wrap input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 1rem;
+  padding: 0.75rem 0.75rem 0.75rem 0;
+  min-width: 0;
+}
+
+.auth-input-wrap input:focus {
+  outline: none;
+}
+
+.auth-input-wrap input::placeholder {
+  color: #555;
+  opacity: 0.85;
+}
+
+.auth-toggle-visibility {
+  flex-shrink: 0;
+  width: 52px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1e1e1e;
+}
+
+.auth-toggle-visibility svg {
+  width: 28px;
+  height: 28px;
+}
+
+.auth-row-between {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin: -0.25rem 0 1.5rem;
+}
+
+.auth-link-muted {
+  font-family: 'Roboto', sans-serif;
+  font-size: clamp(0.95rem, 2vw, 1.2rem);
+  color: #000;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.auth-link-muted:hover {
+  opacity: 0.75;
+}
+
+.auth-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.auth-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+  min-height: 56px;
+  padding: 10px 1.25rem;
+  border: none;
+  background: #fff;
+  font-family: 'Roboto', 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1rem, 2.2vw, 1.35rem);
+  cursor: pointer;
+  text-decoration: none;
+  color: #000;
+  border-radius: 2px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+}
+
+.auth-btn:hover {
+  filter: brightness(0.97);
+}
+
+.auth-btn:active {
+  transform: translateY(1px);
+}
+
+.auth-btn-secondary {
+  font-family: 'Roboto', sans-serif;
+}
+
+.auth-footer-note {
+  margin: 2rem 0 0;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  line-height: 1.4;
+}
+
+.auth-footer-note a {
+  color: inherit;
+  font-weight: 500;
+}
+
+.auth-message {
+  margin: 0 0 1rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  display: none;
+}
+
+.auth-message.is-visible {
+  display: block;
+}
+
+.auth-message--error {
+  background: #fde8e8;
+  color: #7f1d1d;
+  border: 1px solid #f5c2c7;
+}
+
+.auth-message--ok {
+  background: #e8f5e9;
+  color: #1b5e20;
+  border: 1px solid #c8e6c9;
+}
+
+.auth-hint-block {
+  margin: 0 0 1.5rem;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-style: italic;
+  font-weight: 100;
+  font-size: clamp(0.95rem, 2.2vw, 1.25rem);
+  line-height: 1.45;
+}
+
+@media (min-width: 640px) {
+  .auth-topbar {
+    min-height: 129px;
+  }
+}
